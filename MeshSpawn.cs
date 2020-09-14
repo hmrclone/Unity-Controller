@@ -1,8 +1,7 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using UnityEditor;
 using UnityEngine;
 
 public class MeshSpawn : MonoBehaviour
@@ -58,47 +57,26 @@ public class MeshSpawn : MonoBehaviour
 
     void Update()
     {
-        if (progress < GameControl.control.progress) {
-            progress = GameControl.control.progress;
-            if (progress <= sortedBricks.Count)
-            {
-                for (int i = GameControl.control.progress; i <= progress; i++)
-                {
-                    //sortedBricks[progress].GetComponent<MeshRenderer>().enabled = true ;
-                    sortedBricks[i].SetActive(true);
-                    print(i);
-                    print(sortedBricks[i].transform.position);
-                }
-            }
-            GameControl.control.Save();
-            print("save");
-        }
-        if (progress > GameControl.control.progress) {
-            if (progress <= sortedBricks.Count)
-            {
-                for (int i = GameControl.control.progress; i <= progress; i++)
-                {
-                    //sortedBricks[progress].GetComponent<MeshRenderer>().enabled = true ;
-                    sortedBricks[i].SetActive(true);
-                    print(i);
-                    print(sortedBricks[i].transform.position);
-                }
-            }
-            GameControl.control.progress = progress;
-            GameControl.control.Save();
-            print("save");
-        }
-        
-        if (Input.GetKeyUp(KeyCode.W))
+        if (progress <= sortedBricks.Count)
         {
-            progress++;
-            GameControl.control.progress = progress;
+            if (Input.GetKey(KeyCode.W))
+            {
+                //sortedBricks[progress].GetComponent<MeshRenderer>().enabled = true ;
+                sortedBricks[progress].SetActive(true);
+                print(progress);
+                print(sortedBricks[progress].transform.position);
 
+            }
+            if (Input.GetKeyUp(KeyCode.W))
+            {
+                progress++;
+                GameControl.control.progress = progress;
+            }
         }
-    }
-
-    private void OnApplicationQuit()
-    {
-        GameControl.control.Save();
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            GameControl.control.Save();
+            print("save");
+        }
     }
 }
