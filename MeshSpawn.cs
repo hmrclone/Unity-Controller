@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class MeshSpawn : MonoBehaviour
@@ -9,7 +11,10 @@ public class MeshSpawn : MonoBehaviour
 
     public GameObject brickPrefab;
     public float spawnTime = 1.0f;
-    //List<GameObject> bricks;
+    List<GameObject> bricks = new List<GameObject>();
+    List<GameObject> sortedBricks = new List<GameObject>();
+
+    private int progress = 0;
 
     void Start()
     {
@@ -19,21 +24,38 @@ public class MeshSpawn : MonoBehaviour
         {
             GameObject a = Instantiate(brickPrefab) as GameObject;
             a.transform.parent = gameObject.transform;
-            a.transform.position = vertices[i];
+            a.transform.localPosition = vertices[i];
             //a.GetComponent<MeshRenderer>().enabled = false;
-            //bricks.Add(a);
+            a.SetActive(false);
+            bricks.Add(a);
         }
+        //IEnumerable<GameObject> brickSorted = bricks.OrderBy(GameObject => GameObject.transform.localPosition.y);
+        sortedBricks = bricks.OrderBy(brick => brick.transform.localPosition.z).ToList();
         print(vertices.Length);
+        print(bricks.Count);
     }
 
 
-    private void spawn() {
-        
+
+    private void spawn()
+    {
+
     }
 
 
     void Update()
     {
-        
+        if (Input.GetKey(KeyCode.W))
+        {
+            //bricks[progress].GetComponent<MeshRenderer>().enabled = true ;
+
+            sortedBricks[progress].SetActive(true);
+            print(progress);
+            print(sortedBricks[progress].transform.position);
+
+        }
+        if (Input.GetKeyUp(KeyCode.W)) {
+            progress++;
+        }
     }
 }
