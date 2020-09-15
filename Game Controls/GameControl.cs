@@ -10,6 +10,7 @@ public class GameControl : MonoBehaviour
     public static GameControl control; //makes this a singleton
 
     public int progress;
+    public bool playerSpawn;
 
     void Awake()
     {
@@ -24,6 +25,18 @@ public class GameControl : MonoBehaviour
         }
         print(Application.persistentDataPath);
         Load();
+    }
+
+    void Setup() {
+        playerSpawn = false;
+    }
+
+    private void Update()
+    {
+        //test behaviours here
+        if (Input.GetKeyUp(KeyCode.W)) {
+            playerSpawn = true;
+        }
     }
 
     //ANYTHING ELSE YOU DO IN THIS SCRIPT WILL THEN ALSO HAPPEN ACROSS SCENES, E.G. ADDING GUI ELEMENTS WITH void OnGUI(){}!
@@ -52,7 +65,8 @@ public class GameControl : MonoBehaviour
 
             progress = data.progress;
         }
-    } 
+    }
+
 }
 
 [Serializable] //class just used as data container, we literally just have to say it's serializable here and then it is
