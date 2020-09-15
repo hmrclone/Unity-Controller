@@ -35,13 +35,17 @@ public class MeshSpawn : MonoBehaviour
         print(vertices.Length);
         print(sortedBricks.Count);
         bricks = new List<GameObject>();
-        if (progress <= sortedBricks.Count) {
-            for (int i = 1; i < progress; i++) {
+        if (progress <= sortedBricks.Count)
+        {
+            for (int i = 1; i < progress; i++)
+            {
                 sortedBricks[i].SetActive(true);
             }
         }
-        else if (progress>sortedBricks.Count) {
-            for (int i = 1; i < sortedBricks.Count; i++) {
+        else if (progress > sortedBricks.Count)
+        {
+            for (int i = 1; i < sortedBricks.Count; i++)
+            {
                 sortedBricks[i].SetActive(true);
             }
         }
@@ -57,26 +61,45 @@ public class MeshSpawn : MonoBehaviour
 
     void Update()
     {
-        if (progress <= sortedBricks.Count)
+        if (GameControl.control.progress != progress)
         {
-            if (Input.GetKey(KeyCode.W))
+            if (progress >= 0 && progress <= sortedBricks.Count)
             {
+                //Render those behind game
+                if (progress < GameControl.control.progress)
+                {
+                    for (int i = progress; i <= GameControl.control.progress; i++)
+                    {
+                        sortedBricks[i].SetActive(true);
+                        print(sortedBricks[i].transform.position);
+                    }
+                    //render those between progress and GameControl
+                }
+                //Un-render those ahead of game
+                else if (progress > GameControl.control.progress)
+                {
+                    for (int i = GameControl.control.progress; i <= progress; i++)
+                        //un-render those in between 
+                        sortedBricks[i].SetActive(false);
+                }
+                //Take progress from game
+                progress = GameControl.control.progress;
+                //if (Input.GetKey(KeyCode.W)) //WANT TO DO THIS WHEN MESSAGE COMES IN, WITHOUT DIFFICUILT LOGIC!
+                //if gamecontrol... NOT EQUAL to progress, i.e. doesn't have to be lopsided?
+                //{
                 //sortedBricks[progress].GetComponent<MeshRenderer>().enabled = true ;
-                sortedBricks[progress].SetActive(true);
-                print(progress);
-                print(sortedBricks[progress].transform.position);
-
-            }
-            if (Input.GetKeyUp(KeyCode.W))
-            {
-                progress++;
-                GameControl.control.progress = progress;
+                //}
+                /*if (Input.GetKeyUp(KeyCode.W))
+                {
+                    progress++;
+                    GameControl.control.progress = progress;
+                }*/
             }
         }
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            GameControl.control.Save();
-            print("save");
-        }
+    }
+    private void OnApplicationQuit()
+    {
+        GameControl.control.Save();
+        print("saved");
     }
 }
